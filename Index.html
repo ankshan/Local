@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Secret For You... 💛</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Georgia', serif;
+    background-color: #4a1020;
+    transition: background-color 2.5s ease;
+    color: #ffe9c7;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+  }
+
+  /* Ambient glow overlay - pulses like candlelight */
+  #glowOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,120,90,0.35), transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  #dots { display: flex; gap: 8px; margin-bottom: 25px; z-index: 2; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background 0.4s; }
+  .dot.filled { background: #ffd700; box-shadow: 0 0 8px #ffd700; }
+
+  .stage { display: none; animation: fadeIn 1.2s ease; max-width: 480px; z-index: 2; }
+  .stage.active { display: block; }
+  @keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
+
+  h1 { font-size: 1.7em; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6); margin-bottom: 15px; }
+  p { font-size: 1.05em; line-height: 1.6; margin-bottom: 15px; color: #ffe9c7; }
+  .en { color: #ffe9c7; }
+  .hi { color: #ffb6c1; font-style: italic; }
+  .gu { color: #ffcc80; font-style: italic; }
+
+  button {
+    background: linear-gradient(135deg, #ff5e62, #ff9966);
+    border: none;
+    color: white;
+    padding: 14px 28px;
+    font-size: 1em;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255,94,98,0.6);
+    transition: transform 0.2s;
+    font-family: inherit;
+    margin: 6px;
+  }
+  button:active { transform: scale(0.95); }
+  .ghost-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,215,0,0.4);
+    box-shadow: none;
+  }
+
+  .heart { position: fixed; bottom: -10%; font-size: 1.5em; opacity: 0.8; animation: rise linear infinite; pointer-events: none; z-index: 1; }
+  @keyframes rise { to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+
+  .diya, .keyicon { font-size: 2.5em; animation: flicker 1.5s infinite alternate; }
+  @keyframes flicker { from { opacity: 1; } to { opacity: 0.6; } }
+
+  #countdown { display: flex; justify-content: center; gap: 12px; margin: 25px 0; flex-wrap: wrap; }
+  .box {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,215,0,0.4);
+    border-radius: 14px;
+    padding: 14px 10px;
+    min-width: 65px;
+  }
+  .box span { display: block; font-size: 1.6em; font-weight: bold; color: #ffd700; }
+  .box small { font-size: 0.7em; color: #ffe9c7; }
+
+  .glow { text-shadow: 0 0 20px #ffd700, 0 0 40px #ff5e62; }
+  .musicnote { font-size: 0.9em; opacity: 0.75; margin-top: 10px; }
+
+  .revealtext { display: none; margin-top: 10px; font-size: 1em; color: #ffd1d1; }
+</style>
+</head>
+<body>
+
+<div id="glowOverlay"></div>
+<div id="hearts"></div>
+
+<div id="dots">
+  <div class="dot filled" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+  <div class="dot" id="dot3"></div>
+  <div class="dot" id="dot4"></div>
+  <div class="dot" id="dot5"></div>
+  <div class="dot" id="dot6"></div>
+</div>
+
+<!-- Hidden YouTube player -->
+<div style="position:absolute; width:1px; height:1px; overflow:hidden;">
+  <iframe id="ytplayer" width="1" height="1"
+    src="https://www.youtube.com/embed/tTfF5klskmo?enablejsapi=1&autoplay=0&loop=1&playlist=tTfF5klskmo"
+    frameborder="0" allow="autoplay; encrypted-media">
+  </iframe>
+</div>
+
+<!-- STAGE 1 -->
+<div class="stage active" id="s1">
+  <div class="diya">🪔</div>
+  <h1>A Secret, Just For You...</h1>
+  <p class="en">Something beautiful is waiting here — but it unfolds slowly, one step at a time.</p>
+  <p class="hi">Ek raaz hai tumhare liye, dheere dheere khulega... jaise pyaar khulta hai.</p>
+  <p class="gu">Tara maate ek raaz chhe, je dheere dheere khulshe. 💛</p>
+  <button onclick="goTo('s2')">Open It 👉</button>
+</div>
+
+<!-- STAGE 2 -->
+<div class="stage" id="s2">
+  <p class="en">Every day with you feels like a story I never want to end.</p>
+  <p class="hi">Tum mile, toh zindagi khud ek kahani lagne lagi... aur kal, kal thoda alag hai.</p>
+  <p class="gu">Tara vagar kai pan saru nathi lagtu. Kale kaink khaas thashe 😉</p>
+  <button onclick="goTo('s3')">Keep Going ➡️</button>
+</div>
+
+<!-- STAGE 3: interactive tease -->
+<div class="stage" id="s3">
+  <p class="en">Quick question, my love — do you remember our first date?</p>
+  <p class="hi">Yaad hai humari pehli mulaqat?</p>
+  <p class="gu">Yaad chhe apri pehli mulaakaat?</p>
+  <div>
+    <button class="ghost-btn" onclick="revealAnswer()">Of course 💛</button>
+    <button class="ghost-btn" onclick="revealAnswer()">Remind me 😏</button>
+  </div>
+  <p class="revealtext" id="ans3">Whatever you answered... I remember every second of it. And tomorrow night, we're making a new one. ✨</p>
+  <div id="s3next" style="display:none; margin-top:15px;">
+    <button onclick="goTo('s4')">Continue ➡️</button>
+  </div>
+</div>
+
+<!-- STAGE 4: the key -->
+<div class="stage" id="s4">
+  <div class="keyicon">🗝️</div>
+  <h1>There's One Door Left...</h1>
+  <p class="en">There's a moment coming — right when the clock strikes midnight.</p>
+  <p class="hi">Chaand bhi sharma jaaye, jab tum muskurati ho... aur kal raat, kuch khaas hone wala hai.</p>
+  <p class="gu">Chandra pan sharmai jay, jyare tu smit kare chhe. Kale raate, kaink sundar sharu thashe. ✨</p>
+  <button onclick="goTo('s5')">Unlock the Last Secret 🔓</button>
+</div>
+
+<!-- STAGE 5: building suspense -->
+<div class="stage" id="s5">
+  <h1 class="glow">Almost There...</h1>
+  <p class="en">I've been planning this for a while. Tomorrow night, everything comes together.</p>
+  <p class="hi">Bahut dinon se soch raha tha... kal raat, sab kuch saamne aa jayega.</p>
+  <p class="gu">Ghana samay thi vichari rahyo hato... kale raate, badhu j saamne aavse.</p>
+  <button onclick="goTo('s6')">I'm Ready 💫</button>
+</div>
+
+<!-- STAGE 6: reveal + countdown -->
+<div class="stage" id="s6">
+  <h1 class="glow">Tomorrow Night, At Midnight...</h1>
+  <p class="en">Something romantic is coming your way. Stay ready, my love.</p>
+  <p class="hi">Kuch romantic hone wala hai, meri jaan. Tayaar reh jaana.</p>
+  <p class="gu">Taiyar rehje, mari jaan — aa rahyo tamaro countdown ⏳💕</p>
+  <div id="countdown">
+    <div class="box"><span id="d">00</span><small>Days</small></div>
+    <div class="box"><span id="h">00</span><small>Hours</small></div>
+    <div class="box"><span id="m">00</span><small>Min</small></div>
+    <div class="box"><span id="sec">00</span><small>Sec</small></div>
+  </div>
+  <p id="doneMsg" style="display:none; font-size:1.3em; color:#ffd700;">Yeh Raha Woh Pal... Ae pal aavi gayo, mari jaan. I'm coming to you, my love. 💛</p>
+  <button onclick="tryPlay()">🎵 Play Our Song</button>
+  <p class="musicnote">(if music doesn't start, tap the button above)</p>
+</div>
+
+<script>
+  // ---- Floating hearts ----
+  const heartsContainer = document.getElementById('hearts');
+  const symbols = ['💛','❤️','🌹','✨'];
+  setInterval(() => {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.animationDuration = (4 + Math.random()*4) + 's';
+    h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    heartsContainer.appendChild(h);
+    setTimeout(()=>h.remove(), 8000);
+  }, 600);
+
+  // ---- Background mood colors per stage (light pink -> deep red) ----
+  const bgColors = {
+    s1: '#5c1a2e',
+    s2: '#601526',
+    s3: '#66101f',
+    s4: '#6e0c1a',
+    s5: '#7a0714',
+    s6: '#8a0000'
+  };
+
+  const stageOrder = ['s1','s2','s3','s4','s5','s6'];
+
+  function goTo(id){
+    document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.body.style.backgroundColor = bgColors[id];
+
+    // update progress dots
+    const idx = stageOrder.indexOf(id);
+    stageOrder.forEach((s, i) => {
+      document.getElementById('dot' + (i+1)).classList.toggle('filled', i <= idx);
+    });
+
+    if (id === 's6') tryPlay();
+  }
+
+  function revealAnswer(){
+    document.getElementById('ans3').style.display = 'block';
+    document.getElementById('s3next').style.display = 'block';
+  }
+
+  // ---- YouTube background music with fade-in ----
+  let player;
+  let started = false;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('ytplayer', { events: { 'onReady': () => {} } });
+  }
+
+  function tryPlay(){
+    if (started || !player || !player.playVideo) return;
+    started = true;
+    player.setVolume(0);
+    player.playVideo();
+    fadeInVolume();
+  }
+
+  function fadeInVolume(){
+    let vol = 0;
+    const target = 60;
+    const duration = 20000;
+    const stepTime = 200;
+    const steps = duration / stepTime;
+    const increment = target / steps;
+    const fade = setInterval(() => {
+      vol = Math.min(vol + increment, target);
+      player.setVolume(Math.round(vol));
+      if (vol >= target) clearInterval(fade);
+    }, stepTime);
+  }
+
+  // ---- Countdown to Sept 12, 2026 midnight CST (UTC-6) ----
+  const target = new Date('2026-09-12T00:00:00-06:00').getTime();
+  const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const dist = target - now;
+    if (dist <= 0) {
+      clearInterval(timer);
+      document.getElementById('countdown').style.display = 'none';
+      document.getElementById('doneMsg').style.display = 'block';
+      return;
+    }
+    document.getElementById('d').textContent = Math.floor(dist / (1000*60*60*24));
+    document.getElementById('h').textContent = Math.floor((dist % (1000*60*60*24)) / (1000*60*60));
+    document.getElementById('m').textContent = Math.floor((dist % (1000*60*60)) / (1000*60));
+    document.getElementById('sec').textContent = Math.floor((dist % (1000*60)) / 1000);
+  }, 1000);
+</script>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
